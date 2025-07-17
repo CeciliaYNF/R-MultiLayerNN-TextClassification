@@ -3,7 +3,7 @@
 This is my course assignment, which is still quite rough. Comments and corrections are welcome!
 
 
-## Overall Training思路
+## Overall Training Frame
 
 - **Research Background**: Sentiment analysis
 - **Data Acquisition**: Crawling Douban short reviews
