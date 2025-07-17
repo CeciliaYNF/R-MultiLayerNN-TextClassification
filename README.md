@@ -2,7 +2,7 @@
 
 
 这是我的一项课程作业，做得还比较粗糙，欢迎大家批评指正！
-[中文](README-ZH.md) | [English](README.md)
+[English](README-ZH.md) | [中文](README.md)
 
 
 ## 整体的训练思路如下
