@@ -15,10 +15,21 @@
 
 ## R语言爬虫
   大一上python课程的时候，个人的好奇心驱使尝试用python爬取了数据，但这次作业老师要求用R语言。
+
+  
   网络上关于R语言的爬虫教程不多，而且没有一个很权威的。一开始检索资料花了很长时间。
-  大部分教程都是使用rvest包，但是我不管怎么调整，都会被豆瓣反爬。于是我改成用Rselenium来爬取，参考up主笔记https://www.bilibili.com/opus/653824890129874965?spm_id_from=333.1007.0.0进行环境配置
+  
+  
+  大部分教程都是使用rvest包，但是我不管怎么调整，都会被豆瓣反爬。
+  
+  
+  于是我改成用Rselenium来爬取，参考up主笔记https://www.bilibili.com/opus/653824890129874965?spm_id_from=333.1007.0.0进行环境配置。
+
+  
   需要安装java，之后每次运行需要在cmd输入这行代码：
 <img width="1475" height="379" alt="image" src="https://github.com/user-attachments/assets/ab4e32ba-f458-4ed8-bf51-060faa8410ff" />
+
+
 - 定义一个抓取评论函数scrape_comments(url, output_file)，循环提取评论直到500条或无法获取更多。获取页面源代码并读取成html代码，从html中找到comment-item下short类，读取成文本，添加到总评论集。由于一页有显示数量限制，找到next元素并点击，如果无法点击就退出循环。保存结果到数据框和csv文件。
 
 ## 数据清洗与特征工程
