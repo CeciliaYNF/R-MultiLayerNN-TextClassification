@@ -4,7 +4,7 @@ This is my course assignment, which is still quite rough. Comments and correctio
 [中文](README-ZH.md) | [English](README.md)
 
 
-## Overall Training思路
+## Overall Training Frame
 
 - **Research Background**: Sentiment analysis
 - **Data Acquisition**: Crawling Douban short reviews
