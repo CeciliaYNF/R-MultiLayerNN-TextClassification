@@ -1,60 +1,58 @@
-# 使用R语言爬取文本并训练文本分类模型
+# Using R Language to Crawl Text and Train Text Classification Models
+
+This is my course assignment, which is still quite rough. Comments and corrections are welcome!
+[中文](README-ZH.md) | [English](README.md)
 
 
-这是我的一项课程作业，做得还比较粗糙，欢迎大家批评指正！
-[English](README-ZH.md) | [中文](README.md)
+## Overall Training思路
+
+- **Research Background**: Sentiment analysis
+- **Data Acquisition**: Crawling Douban short reviews
+- **Data Preprocessing**: Text cleaning, Chinese word segmentation, stopword filtering, word frequency analysis
+- **Feature Engineering**: Word frequency matrix and TF-IDF matrix
+- **Model Building**: Neural network model
+- **Model Optimization**: Optimal network structure
 
 
-## 整体的训练思路如下
-  
-- 研究背景：情感分析
-- 数据获取：爬取豆瓣短评
-- 数据预处理：文本清洗、中文分词、停用词过滤、词频分析
-- 特征工程：词频矩阵与TF-IDF矩阵
-- 建立模型：神经网络模型
-- 优化模型：最优网络结构
+## R Language Web Crawling
 
-## R语言爬虫
-  大一上python课程的时候，个人的好奇心驱使尝试用python爬取了数据，但这次作业老师要求用R语言。
+During my first-year Python course, my personal curiosity drove me to try crawling data with Python, but for this assignment, the teacher required using R language.
 
-  
-  网络上关于R语言的爬虫教程不多，而且没有一个很权威的。一开始检索资料花了很长时间。
-  
-  
-  大部分教程都是使用rvest包，但是我不管怎么调整，都会被豆瓣反爬。
-  
-  
-  于是我改成用Rselenium来爬取，参考up主笔记https://www.bilibili.com/opus/653824890129874965?spm_id_from=333.1007.0.0进行环境配置。
 
-  
-  需要安装java，之后每次运行需要在cmd输入这行代码：
+There are not many tutorials on R language web crawling online, and none of them are very authoritative. It took me a long time to search for information initially.
+
+
+Most tutorials use the `rvest` package, but no matter how I adjusted it, I would be blocked by Douban's anti-crawling mechanisms.
+
+
+So I switched to using `RSelenium` for crawling, referring to the notes of a Bilibili uploader for environment configuration: [https://www.bilibili.com/opus/653824890129874965?spm_id_from=333.1007.0.0](https://www.bilibili.com/opus/653824890129874965?spm_id_from=333.1007.0.0).
+
+
+Java needs to be installed, and each time you run it, you need to enter this code in cmd:
 <img width="1475" height="379" alt="image" src="https://github.com/user-attachments/assets/ab4e32ba-f458-4ed8-bf51-060faa8410ff" />
 
 
-- 定义一个抓取评论函数scrape_comments(url, output_file)，循环提取评论直到500条或无法获取更多。
-- 获取页面源代码并读取成html代码，从html中找到comment-item下short类，读取成文本，添加到总评论集。
-- 由于一页有显示数量限制，找到next元素并点击，如果无法点击就退出循环。
-- 保存结果到数据框和csv文件。
-
-## 数据清洗与特征工程
-
-- 保留中文字符和换行符，去除所有其他字符（如英文、数字、标点等），并去掉空行和空评论。用了一个匿名函数function（x）来遍历评论
-- 使用Rwordseg进行分词（一开始想用jieba包，但是这个包安装不好，改天重新试试），过滤停用词表（这个词表是我从github随便扒的，我觉得这样并不严谨，后续再优化一下）
-- 过滤前后进行词频统计以及高频词排序，可以根据这个排序来修改停用词表，去除一些无效信息（但是要怎么定义无效信息呢？这是一个问题）。
-- 构建了文本稀疏矩阵TF-IDF（学大模型的时候发现别人好像有其他的构建方法）
-
-  
-  ## 模型构建与优化
-  
-- 把数据类别转换成0或1，划分数据成训练集和测试集（7：3，这里为什么没有分验证集呢？看下去！）。
-- 这里直接选择了前100个（不然特征太多啦！）最具区分性（指标：正面TF-IDF和负面TF-IDF之间的差值越大就越有区分性）的特征，用来构建用于神经网络的数据集（也就是说有100个变量~），并进行数据标准化。
-- 然后用neuralnet构建神经网络模型。测试并评估性能（准确率、灵敏度、特异性、AUC值）。
-- 从模型隐藏层配置入手来优化模型，定义多种隐藏层配置，分别测试并在测试集上进行预测。
-- 按准确率排序得到最佳配置，重新训练模型，然后把优化结果可视化（柱状图、ROC曲线）。
+- Define a comment scraping function `scrape_comments(url, output_file)` to cyclically extract comments until 500 are collected or no more can be obtained.
+- Get the page source code and read it as HTML code, find the `short` class under `comment-item` from the HTML, read it as text, and add it to the total comment set.
+- Due to the display limit per page, find the `next` element and click it; if it cannot be clicked, exit the loop.
+- Save the results to a data frame and a CSV file.
 
 
-  后来我在学datawhale的fine-tuning的时候https://www.datawhale.cn/learn/content/72/2928
+## Data Cleaning and Feature Engineering
+
+- Retain Chinese characters and line breaks, remove all other characters (such as English, numbers, punctuation, etc.), and remove blank lines and empty comments. An anonymous function `function(x)` was used to iterate through the comments.
+- Use `Rwordseg` for word segmentation (initially wanted to use the `jieba` package, but couldn't install it properly; will try again another day). Filter using a stopword list (I randomly grabbed this list from GitHub, which I think is not rigorous and will be optimized later).
+- Perform word frequency statistics and sort high-frequency words before and after filtering. This sorting can be used to modify the stopword list and remove some invalid information (but how to define invalid information? This is a problem).
+- Construct a text sparse matrix (TF-IDF). When learning large models, I found that others seem to have other construction methods.
 
 
-  在学习中发现应该是要分训练集、验证集和测试集的，不然无法评估模型的泛化能力。后续可以进行优化~
+## Model Construction and Optimization
 
+- Convert data categories to 0 or 1, and split the data into training and test sets (7:3 ratio. Why is there no validation set? Read on!).
+- Here, the top 100 most discriminative features (indicator: the larger the difference between positive and negative TF-IDF values, the more discriminative) were directly selected to build the dataset for the neural network (meaning there are 100 variables), and data standardization was performed.
+- Then use `neuralnet` to build a neural network model. Test and evaluate performance (accuracy, sensitivity, specificity, AUC value).
+- Optimize the model starting from the hidden layer configuration: define multiple hidden layer configurations, test each, and make predictions on the test set.
+- Sort by accuracy to get the best configuration, retrain the model, and visualize the optimization results (histograms, ROC curves).
+
+
+Later, when learning DataWhale's fine-tuning at [https://www.datawhale.cn/learn/content/72/2928](https://www.datawhale.cn/learn/content/72/2928), I realized that the data should be divided into training, validation, and test sets; otherwise, the generalization ability of the model cannot be evaluated. This can be optimized later!
